@@ -29,6 +29,7 @@ torchvision==0.4.0
   - Read the results and plot with MNIST_read_and_plot_whitepatch2M.ipynb and MNIST_read_and_plot_rotation5M.ipynb
 - Amazon review dataset experiments
   - Need to set the Amazon review data folder!
+  - Preprocess the data with read_and_preprocess_amazon_review_data_2018_subset.ipynb
   - Run the simulations with submit_amazon_review_data_2018_subset_regression.py
   - Plot with amazon_read_and_plot.ipynb
 
