@@ -1,5 +1,5 @@
 # CausalDA
-Code to reproduce the numerical experiments in the paper "Domain adaptation under structural causal models"
+Code to reproduce the numerical experiments in the paper "Domain adaptation under structural causal models" (https://arxiv.org/abs/2010.15764)
 by Yuansi Chen and Peter B&uuml;hlmann.
 
 Code written with Python 3.7.1 and PyTorch version as follows
@@ -38,3 +38,12 @@ torchvision==0.4.0
 ## License and Citation
 Code is released under MIT License.
 Please cite our paper if the code helps your research.
+
+```bibtex
+@article{chen2020domain,
+    title={Domain adaptation under structural causal models},
+    author={Chen, Yuansi and Peter B&uuml;hlmann},
+    journal={arXiv preprint arXiv:2010.15764},
+    year={2018}
+}
+```
