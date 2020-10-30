@@ -42,7 +42,7 @@ Please cite our paper if the code helps your research.
 ```bibtex
 @article{chen2020domain,
     title={Domain adaptation under structural causal models},
-    author={Chen, Yuansi and Peter B&uuml;hlmann},
+    author={Chen, Yuansi and Peter B{\"u}hlmann},
     journal={arXiv preprint arXiv:2010.15764},
     year={2018}
 }
