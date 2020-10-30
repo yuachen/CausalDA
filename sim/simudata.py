@@ -1,4 +1,6 @@
 import numpy as np
+import sys
+sys.path.append('../')
 import sem
 import myrandom
 
@@ -15,7 +17,7 @@ def pick_intervention_and_noise(M, dp1, inter2noise_ratio, interY=0., cic=[], ty
         if not varAs:
             varAs = np.zeros((M, dp1))
         interAf = myrandom.Gaussian(M, meanAs, varAs)
-        
+
         noisevar = np.ones((1, dp1))
         noisevar[-1] = varnoiseY
         noisef = myrandom.Gaussian(1, np.zeros((1, dp1)), noisevar)
@@ -34,7 +36,7 @@ def pick_intervention_and_noise(M, dp1, inter2noise_ratio, interY=0., cic=[], ty
         if not varAs:
             varAs = np.zeros((M, dp1))
         interAf =  myrandom.Mix2Gaussian(M, meanAsList, varAs)
-        
+
         noisevar = np.ones((1, dp1))
         noisevar[-1] = varnoiseY
         noisef = myrandom.Gaussian(1, np.zeros((1, dp1)), noisevar)
@@ -61,18 +63,18 @@ def pick_intervention_and_noise(M, dp1, inter2noise_ratio, interY=0., cic=[], ty
         noisevar = np.ones((1, dp1))
         noisevar[-1] = varnoiseY
         noisef = myrandom.Gaussian(1, np.zeros((1, dp1)), noisevar)
-        
+
     elif typeshift == 'sv1':
         meanAs = np.zeros((M, dp1))
         varAs_inter = inter2noise_ratio * (np.abs(np.random.randn(M, dp1)))
         varAs_inter[:, -1] = 1.
         varAs = varAs_inter
-        
+
         interAf = myrandom.Gaussian(M, meanAs, varAs)
-        
+
         # the noise is always zero, is taken care of by interAf
         noisef = myrandom.Gaussian(1, np.zeros((1, dp1)), np.zeros((1, dp1)))
-        
+
     elif typeshift == 'smv1':
         meanAs = inter2noise_ratio * np.random.randn(M, dp1)
         # meanAs[:, -1] = interY * np.random.randn(M) # 0 means no intervention on Y
@@ -83,9 +85,9 @@ def pick_intervention_and_noise(M, dp1, inter2noise_ratio, interY=0., cic=[], ty
         varAs_inter[:, -1] = 1.
         varAs_inter[:, cic] = 1. # set conditional invariant components
         varAs = varAs_inter
-        
+
         interAf = myrandom.Gaussian(M, meanAs, varAs)
-        
+
         # the noise is always zero, is taken care of by interAf
         noisef = myrandom.Gaussian(1, np.zeros((1, dp1)), np.zeros((1, dp1)))
 
@@ -127,10 +129,10 @@ def pick_random_B(pred_dir = 'anticausal', dp1=1):
         B[-1, -1] = 0
     else:
         raise ValueError('case not recognized.')
-    
-    
+
+
     return B
-    
+
 
 def pick_sem(data_num, params = None, seed=123456):
     np.random.seed(seed)
@@ -153,7 +155,7 @@ def pick_sem(data_num, params = None, seed=123456):
         M = params['M']
         # d plus 1
         dp1 = 4
-        
+
 
         inter2noise_ratio = params['inter2noise_ratio']
         if 'x1' in data_num:
@@ -180,7 +182,7 @@ def pick_sem(data_num, params = None, seed=123456):
                 interY = 1.
         else:
             raise ValueError('case not recognized.')
-            
+
         if 'sm1' in data_num:
             typeshift = 'sm1'
         elif 'sm2' in data_num:
@@ -195,11 +197,11 @@ def pick_sem(data_num, params = None, seed=123456):
             typeshift = 'smm2'
         else:
             typeshift = 'sm1'
-            
-        
+
+
         interAf, noisef = pick_intervention_and_noise(M, dp1, inter2noise_ratio, interY=interY,
                                                       cic=cic, typeshift=typeshift, varAs=None, varnoiseY=1.)
-        
+
         if 'r0' in data_num:
             pred_dir = 'anticausal'
             B = np.array([[0, 0, 0, 1], [0, 0, 0, -1], [0, 0, 0, 3], [0, 0, 0, 0]])
@@ -211,7 +213,7 @@ def pick_sem(data_num, params = None, seed=123456):
         else:
             raise ValueError('case not recognized.')
 
-        
+
 
         invariantList = []
         message = "%sM%di%d, fixed simple B" %(data_num, M, inter2noise_ratio)
@@ -230,7 +232,7 @@ def pick_sem(data_num, params = None, seed=123456):
             interY = 1.
 
         inter2noise_ratio = params['inter2noise_ratio']
-        
+
         if 'r0' in data_num:
             pred_dir = 'anticausal'
             varnoiseY = 1.
@@ -244,7 +246,7 @@ def pick_sem(data_num, params = None, seed=123456):
             raise ValueError('case not recognized.')
 
         B = pick_random_B(pred_dir, dp1)
-        
+
         if 'x1' in data_num:
             # conditional invariant components
             cic = []
@@ -278,7 +280,7 @@ def pick_sem(data_num, params = None, seed=123456):
                 interY = 1.
         else:
             raise ValueError('case not recognized.')
-            
+
         if 'sm1' in data_num:
             typeshift = 'sm1'
         elif 'sm2' in data_num:
@@ -291,7 +293,7 @@ def pick_sem(data_num, params = None, seed=123456):
             typeshift = 'smm2'
         else:
             typeshift = 'sm1'
-        
+
         interAf, noisef = pick_intervention_and_noise(M, dp1, inter2noise_ratio, interY=interY, cic=cic, typeshift=typeshift, varAs=None, varnoiseY=varnoiseY)
 
         invariantList = cic

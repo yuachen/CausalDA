@@ -12,8 +12,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
-# import plot_basic
 # local packages
+import sys
+sys.path.append('../')
 import semiclass
 import semitorchclass
 import semitorchstocclass
@@ -52,21 +53,21 @@ if myargs.tag_DA == 'baseline':
               ]
 elif myargs.tag_DA == 'DAmean':
     methods = [
-               semiclass.DIP(lamMatch=myargs.lamMatch, lamL2=lamL2, sourceInd=0), 
-               semiclass.DIPOracle(lamMatch=myargs.lamMatch, lamL2=lamL2, sourceInd=0), 
+               semiclass.DIP(lamMatch=myargs.lamMatch, lamL2=lamL2, sourceInd=0),
+               semiclass.DIPOracle(lamMatch=myargs.lamMatch, lamL2=lamL2, sourceInd=0),
                semiclass.DIPweigh(lamMatch=myargs.lamMatch, lamL2=lamL2),
-               semiclass.CIP(lamCIP=myargs.lamCIP, lamL2=lamL2), 
+               semiclass.CIP(lamCIP=myargs.lamCIP, lamL2=lamL2),
                semiclass.CIRMweigh(lamCIP=myargs.lamCIP, lamMatch=myargs.lamMatch, lamL2=lamL2),
               ]
 elif myargs.tag_DA == 'DAstd':
     methods = [
-               semitorchclass.DIP(lamMatch=myargs.lamMatch, lamL2=lamL2, lamL1=lamL1, sourceInd=0, lr=myargs.lr, 
+               semitorchclass.DIP(lamMatch=myargs.lamMatch, lamL2=lamL2, lamL1=lamL1, sourceInd=0, lr=myargs.lr,
                               epochs=myargs.epochs, wayMatch='mean+std+25p'),
                semitorchclass.DIPweigh(lamMatch=myargs.lamMatch, lamL2=lamL2, lamL1=lamL1, lr=myargs.lr,
                                    epochs=myargs.epochs, wayMatch='mean+std+25p'),
-               semitorchclass.CIP(lamCIP=myargs.lamCIP, lamL2=lamL2, lamL1=lamL1, lr=myargs.lr, 
+               semitorchclass.CIP(lamCIP=myargs.lamCIP, lamL2=lamL2, lamL1=lamL1, lr=myargs.lr,
                                epochs=myargs.epochs, wayMatch='mean+std+25p'),
-               semitorchclass.CIRMweigh(lamMatch=myargs.lamMatch, lamL2=lamL2, lamL1=lamL1, lr=myargs.lr, 
+               semitorchclass.CIRMweigh(lamMatch=myargs.lamMatch, lamL2=lamL2, lamL1=lamL1, lr=myargs.lr,
                                     epochs=myargs.epochs, wayMatch='mean+std+25p'),
               ]
 elif myargs.tag_DA == 'DAMMD':
@@ -75,20 +76,20 @@ elif myargs.tag_DA == 'DAMMD':
                               epochs=myargs.epochs, wayMatch='mmd', sigma_list=[1.]),
                semitorchstocclass.DIPweigh(lamMatch=myargs.lamMatch, lamL2=lamL2, lamL1=lamL1, lr=myargs.lr,
                                        epochs=myargs.epochs, wayMatch='mmd', sigma_list=[1.]),
-               semitorchstocclass.CIP(lamCIP=myargs.lamCIP, lamL2=lamL2, lamL1=lamL1, lr=myargs.lr, 
+               semitorchstocclass.CIP(lamCIP=myargs.lamCIP, lamL2=lamL2, lamL1=lamL1, lr=myargs.lr,
                                   epochs=myargs.epochs, wayMatch='mmd', sigma_list=[1.]),
-               semitorchstocclass.CIRMweigh(lamMatch=myargs.lamMatch, lamCIP=myargs.lamCIP, lamL2=lamL2, lamL1=lamL1, lr=myargs.lr, 
+               semitorchstocclass.CIRMweigh(lamMatch=myargs.lamMatch, lamCIP=myargs.lamCIP, lamL2=lamL2, lamL1=lamL1, lr=myargs.lr,
                                         epochs=myargs.epochs, wayMatch='mmd', sigma_list=[1.])
               ]
 elif myargs.tag_DA == 'DACIP':
     methods = [
-               semiclass.CIP(lamCIP=myargs.lamCIP, lamL2=lamL2), 
-               semitorchclass.CIP(lamCIP=myargs.lamCIP, lamL2=lamL2, lamL1=lamL1, lr=myargs.lr, 
+               semiclass.CIP(lamCIP=myargs.lamCIP, lamL2=lamL2),
+               semitorchclass.CIP(lamCIP=myargs.lamCIP, lamL2=lamL2, lamL1=lamL1, lr=myargs.lr,
                                epochs=myargs.epochs, wayMatch='mean+std+25p'),
               ]
 elif myargs.tag_DA == 'DACIPMMD':
     methods = [
-               semitorchstocclass.CIP(lamCIP=myargs.lamCIP, lamL2=lamL2, lamL1=lamL1, lr=myargs.lr, 
+               semitorchstocclass.CIP(lamCIP=myargs.lamCIP, lamL2=lamL2, lamL1=lamL1, lr=myargs.lr,
                                   epochs=myargs.epochs, wayMatch='mmd', sigma_list=[1.]),
               ]
 
@@ -99,11 +100,11 @@ names_short = [str(m).split('_')[0] for m in methods]
 print(names_short)
 
 seed1 = int(123456 + np.exp(2) * 1000)
-            
+
 params = {'M': 15, 'inter2noise_ratio': 1., 'd': 20, 'cicnum': 10,'interY': 1.}
 
-sem1 = simudata.pick_sem('r0%sd?x4' %myargs.interv_type, 
-                         params=params, 
+sem1 = simudata.pick_sem('r0%sd?x4' %myargs.interv_type,
+                         params=params,
                          seed=seed1+myargs.seed)
 
 # run methods on data generated from sem
@@ -121,5 +122,5 @@ res_all['minDiffIndx'] = results_minDiffIndx
 
 np.save("simu_results/sim_exp9_scat_r0%sd20x4_%s_lamMatch%s_lamCIP%s_n%d_epochs%d_seed%d.npy" %(myargs.interv_type,
         myargs.tag_DA, myargs.lamMatch, myargs.lamCIP, myargs.n, myargs.epochs, myargs.seed), res_all)
-            
+
 

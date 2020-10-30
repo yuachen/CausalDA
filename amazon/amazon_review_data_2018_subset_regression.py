@@ -22,6 +22,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 # local packages
+import sys
+sys.path.append('../')
 import semiclass
 import semitorchclass
 import semitorchstocclass
@@ -47,23 +49,25 @@ parser.add_argument("--lr", type=float, default=1e-3, help="learning rate")
 myargs = parser.parse_args()
 print(myargs)
 
+data_folder = '../../data/amazon_review_data_2018_subset'
+
 # 'All_Beauty_5', 'AMAZON_FASHION_5', 'Appliances_5', 'Gift_Cards_5', 'Magazine_Subscriptions_5'
 # are removed for now for not enough number of data points
 categories = [
               'Arts_Crafts_and_Sewing_5', 'Automotive_5', 'CDs_and_Vinyl_5',
-              'Cell_Phones_and_Accessories_5', 'Digital_Music_5', 
+              'Cell_Phones_and_Accessories_5', 'Digital_Music_5',
               'Grocery_and_Gourmet_Food_5', 'Industrial_and_Scientific_5', 'Luxury_Beauty_5',
-              'Musical_Instruments_5', 'Office_Products_5', 
-              'Patio_Lawn_and_Garden_5', 'Pet_Supplies_5', 'Prime_Pantry_5', 
+              'Musical_Instruments_5', 'Office_Products_5',
+              'Patio_Lawn_and_Garden_5', 'Pet_Supplies_5', 'Prime_Pantry_5',
               'Software_5', 'Tools_and_Home_Improvement_5', 'Toys_and_Games_5']
 
 nb_reviews = 10000
 dfs = {}
 for i, cate in enumerate(categories):
-    df = pd.read_csv('../../data/amazon_review_data_2018_subset/%s_%d.csv' %(cate,nb_reviews))
+    df = pd.read_csv('%s/%s_%d.csv' %(data_folder, cate, nb_reviews))
     dfs[i] = df
     print(cate, dfs[i].shape)
-    
+
 allReviews = pd.concat([dfs[i]['reviewText'] for i in range(len(categories))])
 ngramMin = 1
 ngramMax = 2
@@ -81,21 +85,21 @@ if myargs.tag_DA == 'baseline':
               ]
 elif myargs.tag_DA == 'DAmean':
     methods = [
-               semiclass.DIP(lamMatch=myargs.lamMatch, lamL2=myargs.lamL2, sourceInd=0), 
-               semiclass.DIPOracle(lamMatch=myargs.lamMatch, lamL2=myargs.lamL2, sourceInd=0), 
+               semiclass.DIP(lamMatch=myargs.lamMatch, lamL2=myargs.lamL2, sourceInd=0),
+               semiclass.DIPOracle(lamMatch=myargs.lamMatch, lamL2=myargs.lamL2, sourceInd=0),
                semiclass.DIPweigh(lamMatch=myargs.lamMatch, lamL2=myargs.lamL2),
-               semiclass.CIP(lamCIP=myargs.lamCIP, lamL2=myargs.lamL2), 
+               semiclass.CIP(lamCIP=myargs.lamCIP, lamL2=myargs.lamL2),
                semiclass.CIRMweigh(lamCIP=myargs.lamCIP, lamMatch=myargs.lamMatch, lamL2=myargs.lamL2),
               ]
 elif myargs.tag_DA == 'DAstd':
     methods = [
-               semitorchclass.DIP(lamMatch=myargs.lamMatch, lamL2=myargs.lamL2, lamL1=lamL1, sourceInd=0, lr=myargs.lr, 
+               semitorchclass.DIP(lamMatch=myargs.lamMatch, lamL2=myargs.lamL2, lamL1=lamL1, sourceInd=0, lr=myargs.lr,
                               epochs=myargs.epochs, wayMatch='mean+std+25p'),
                semitorchclass.DIPweigh(lamMatch=myargs.lamMatch, lamL2=myargs.lamL2, lamL1=lamL1, lr=myargs.lr,
                                    epochs=myargs.epochs, wayMatch='mean+std+25p'),
-               semitorchclass.CIP(lamCIP=myargs.lamCIP, lamL2=myargs.lamL2, lamL1=lamL1, lr=myargs.lr, 
+               semitorchclass.CIP(lamCIP=myargs.lamCIP, lamL2=myargs.lamL2, lamL1=lamL1, lr=myargs.lr,
                                epochs=myargs.epochs, wayMatch='mean+std+25p'),
-               semitorchclass.CIRMweigh(lamMatch=myargs.lamMatch, lamL2=myargs.lamL2, lamL1=lamL1, lr=myargs.lr, 
+               semitorchclass.CIRMweigh(lamMatch=myargs.lamMatch, lamL2=myargs.lamL2, lamL1=lamL1, lr=myargs.lr,
                                     epochs=myargs.epochs, wayMatch='mean+std+25p'),
               ]
 elif myargs.tag_DA == 'DAMMD':
@@ -104,9 +108,9 @@ elif myargs.tag_DA == 'DAMMD':
                               epochs=myargs.epochs, wayMatch='mmd', sigma_list=[1.]),
                semitorchstocclass.DIPweigh(lamMatch=myargs.lamMatch, lamL2=myargs.lamL2, lamL1=lamL1, lr=myargs.lr,
                                        epochs=myargs.epochs, wayMatch='mmd', sigma_list=[1.]),
-               semitorchstocclass.CIP(lamCIP=myargs.lamCIP, lamL2=myargs.lamL2, lamL1=lamL1, lr=myargs.lr, 
+               semitorchstocclass.CIP(lamCIP=myargs.lamCIP, lamL2=myargs.lamL2, lamL1=lamL1, lr=myargs.lr,
                                   epochs=myargs.epochs, wayMatch='mmd', sigma_list=[1.]),
-               semitorchstocclass.CIRMweigh(lamMatch=myargs.lamMatch, lamCIP=myargs.lamCIP, lamL2=myargs.lamL2, lamL1=lamL1, lr=myargs.lr, 
+               semitorchstocclass.CIRMweigh(lamMatch=myargs.lamMatch, lamCIP=myargs.lamCIP, lamL2=myargs.lamL2, lamL1=lamL1, lr=myargs.lr,
                                         epochs=myargs.epochs, wayMatch='mmd', sigma_list=[1.])
               ]
 
@@ -114,7 +118,7 @@ names = [str(m) for m in methods]
 print(names)
 
 # random data split
-random_state = 123456 + myargs.seed 
+random_state = 123456 + myargs.seed
 datasets = {}
 datasets_test = {}
 for i, cate in enumerate(categories):
@@ -130,7 +134,7 @@ for i, cate in enumerate(categories):
 
     print(cate, X_train.shape, X_test.shape)
 
-# normalize 
+# normalize
 Xmean = 0
 N = 0
 for i, cate in enumerate(categories):
@@ -156,11 +160,11 @@ for i, cate in enumerate(categories):
 # create torch format data
 dataTorch = {}
 dataTorchTest = {}
-  
+
 for i in range(len(categories)):
-    dataTorch[i] = [torch.from_numpy(datasets[i][0].astype(np.float32)).to(device), 
+    dataTorch[i] = [torch.from_numpy(datasets[i][0].astype(np.float32)).to(device),
                 torch.from_numpy(datasets[i][1].astype(np.float32)).to(device)]
-    dataTorchTest[i] = [torch.from_numpy(datasets_test[i][0].astype(np.float32)).to(device), 
+    dataTorchTest[i] = [torch.from_numpy(datasets_test[i][0].astype(np.float32)).to(device),
                 torch.from_numpy(datasets_test[i][1].astype(np.float32)).to(device)]
 
 train_batch_size = 500
@@ -240,8 +244,8 @@ res_all['tar'] = results_tar_all
 res_all['minDiffIndx'] = results_minDiffIndx
 res_all['tar_sub'] = results_tar_sub_all
 res_all['labeledsize_list'] = labeledsize_list
-        
-np.save('results_amazon/amazon_review_data_2018_N%d_%s_minDf%s_lamL2%s_lamMatch%s_lamCIP%s_target%d_seed%d.npy' %( 
+
+np.save('results_amazon/amazon_review_data_2018_N%d_%s_minDf%s_lamL2%s_lamMatch%s_lamCIP%s_target%d_seed%d.npy' %(
            nb_reviews, myargs.tag_DA, myargs.minDf, myargs.lamL2, myargs.lamMatch, myargs.lamCIP, myargs.target, myargs.seed), res_all)
 
 
