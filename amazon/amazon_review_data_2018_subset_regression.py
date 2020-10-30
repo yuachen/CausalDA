@@ -49,7 +49,7 @@ parser.add_argument("--lr", type=float, default=1e-3, help="learning rate")
 myargs = parser.parse_args()
 print(myargs)
 
-data_folder = '../../data/amazon_review_data_2018_subset'
+data_folder = 'data/amazon_review_data_2018_subset'
 
 # 'All_Beauty_5', 'AMAZON_FASHION_5', 'Appliances_5', 'Gift_Cards_5', 'Magazine_Subscriptions_5'
 # are removed for now for not enough number of data points
