@@ -914,9 +914,9 @@ class CIRMweigh(BaseEstimator):
             meanYY = 0
             meanYX = 0
             for m in source:
-                sizeofdatam = dataloaders[m].dataset.targets.shape[0]
+                sizeofdatam = dataloaders[m].dataset.targets_mod.shape[0]
                 Ym_onehot = torch.zeros((sizeofdatam, num_classes), dtype=torch.float)
-                Ym_onehot = Ym_onehot.scatter_(1, dataloaders[m].dataset.targets.reshape(-1, 1), 1)
+                Ym_onehot = Ym_onehot.scatter_(1, dataloaders[m].dataset.targets_mod.reshape(-1, 1), 1)
                 Ym_onehot_sum = Ym_onehot.sum(0).reshape(1, -1).to(device)
 
                 for i, data in enumerate(dataloaders[m]):
@@ -960,7 +960,7 @@ class CIRMweigh(BaseEstimator):
                     feat_bf_fc2_mod[m] += torch.sum(outputs_bf_fc2, 0) - 1.* torch.mm(outputs_at_fc2_sum_normalized, b)
 
 
-                feat_bf_fc2_mod[m] /= dataloaders[m].dataset.targets.shape[0]
+                feat_bf_fc2_mod[m] /= dataloaders[m].dataset.targets_mod.shape[0]
 
         # second run mean match on the modified before-fc2 feature
         models = {}
@@ -1103,9 +1103,9 @@ class CIRMweigh_MMD(BaseEstimator):
             meanYY = 0
             meanYX = 0
             for m in source:
-                sizeofdatam = dataloaders[m].dataset.targets.shape[0]
+                sizeofdatam = dataloaders[m].dataset.targets_mod.shape[0]
                 Ym_onehot = torch.zeros((sizeofdatam, num_classes), dtype=torch.float)
-                Ym_onehot = Ym_onehot.scatter_(1, dataloaders[m].dataset.targets.reshape(-1, 1), 1)
+                Ym_onehot = Ym_onehot.scatter_(1, dataloaders[m].dataset.targets_mod.reshape(-1, 1), 1)
                 Ym_onehot_sum = Ym_onehot.sum(0).reshape(1, -1).to(device)
 
                 for i, data in enumerate(dataloaders[m]):

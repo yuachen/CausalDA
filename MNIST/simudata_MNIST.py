@@ -102,6 +102,8 @@ def generate_MNIST_envs(perturb='noisepatch', subset_prop=0.1, M=12, interY=Fals
                                              sampler = torch.utils.data.sampler.SubsetRandomSampler(idx_trainsetlist_loc))
             testloaders[m] = torch.utils.data.DataLoader(testset, batch_size=test_batch_size, num_workers=0, 
                                              sampler = torch.utils.data.sampler.SubsetRandomSampler(idx_testsetlist_loc))
+            trainloaders[m].dataset.targets_mod = trainloaders[m].dataset.targets[idx_trainsetlist_loc]
+            testloaders[m].dataset.targets_mod = testloaders[m].dataset.targets[idx_testsetlist_loc]
     elif perturb == 'whitepatch2M':
         # prepare the noise patces
         # noise_patches = [torch.zeros(1, 28, 28)]
@@ -145,6 +147,8 @@ def generate_MNIST_envs(perturb='noisepatch', subset_prop=0.1, M=12, interY=Fals
                                              sampler = torch.utils.data.sampler.SubsetRandomSampler(idx_trainsetlist_loc))
             testloaders[m] = torch.utils.data.DataLoader(testset, batch_size=test_batch_size, num_workers=0, 
                                              sampler = torch.utils.data.sampler.SubsetRandomSampler(idx_testsetlist_loc))
+            trainloaders[m].dataset.targets_mod = trainloaders[m].dataset.targets[idx_trainsetlist_loc]
+            testloaders[m].dataset.targets_mod = testloaders[m].dataset.targets[idx_testsetlist_loc]
     elif perturb == 'noisepatch':
         # prepare the noise patces
         noise_patches = []
@@ -192,6 +196,8 @@ def generate_MNIST_envs(perturb='noisepatch', subset_prop=0.1, M=12, interY=Fals
                                              sampler = torch.utils.data.sampler.SubsetRandomSampler(idx_trainsetlist_loc))
             testloaders[m] = torch.utils.data.DataLoader(testset, batch_size=test_batch_size, num_workers=0, 
                                              sampler = torch.utils.data.sampler.SubsetRandomSampler(idx_testsetlist_loc))
+            trainloaders[m].dataset.targets_mod = trainloaders[m].dataset.targets[idx_trainsetlist_loc]
+            testloaders[m].dataset.targets_mod = testloaders[m].dataset.targets[idx_testsetlist_loc]
             
     elif perturb == 'rotation':
         angles = np.zeros(M)
@@ -228,6 +234,8 @@ def generate_MNIST_envs(perturb='noisepatch', subset_prop=0.1, M=12, interY=Fals
                                              sampler = torch.utils.data.sampler.SubsetRandomSampler(idx_trainsetlist_loc))
             testloaders[m] = torch.utils.data.DataLoader(testset, batch_size=test_batch_size, num_workers=0, 
                                              sampler = torch.utils.data.sampler.SubsetRandomSampler(idx_testsetlist_loc))
+            trainloaders[m].dataset.targets_mod = trainloaders[m].dataset.targets[idx_trainsetlist_loc]
+            testloaders[m].dataset.targets_mod = testloaders[m].dataset.targets[idx_testsetlist_loc]
     elif perturb == 'rotation2M' or perturb == 'rotation2Ma':
         if perturb == 'rotation2M':
             angles = [30, 45]
@@ -259,6 +267,8 @@ def generate_MNIST_envs(perturb='noisepatch', subset_prop=0.1, M=12, interY=Fals
                                              sampler = torch.utils.data.sampler.SubsetRandomSampler(idx_trainsetlist_loc))
             testloaders[m] = torch.utils.data.DataLoader(testset, batch_size=test_batch_size, num_workers=0, 
                                              sampler = torch.utils.data.sampler.SubsetRandomSampler(idx_testsetlist_loc))
+            trainloaders[m].dataset.targets_mod = trainloaders[m].dataset.targets[idx_trainsetlist_loc]
+            testloaders[m].dataset.targets_mod = testloaders[m].dataset.targets[idx_testsetlist_loc]
             
     elif perturb == 'translation2M':
         translates = [(0.2, 0), (0, 0.2)]
@@ -288,6 +298,8 @@ def generate_MNIST_envs(perturb='noisepatch', subset_prop=0.1, M=12, interY=Fals
                                              sampler = torch.utils.data.sampler.SubsetRandomSampler(idx_trainsetlist_loc))
             testloaders[m] = torch.utils.data.DataLoader(testset, batch_size=test_batch_size, num_workers=0, 
                                              sampler = torch.utils.data.sampler.SubsetRandomSampler(idx_testsetlist_loc))
+            trainloaders[m].dataset.targets_mod = trainloaders[m].dataset.targets[idx_trainsetlist_loc]
+            testloaders[m].dataset.targets_mod = testloaders[m].dataset.targets[idx_testsetlist_loc]
             
     return trainloaders, testloaders
     
