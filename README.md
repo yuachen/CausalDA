@@ -24,6 +24,7 @@ torchvision==0.4.0
   - Read the results and plot with sim_linearSCM_variance_shift_exp8-9.ipynb
 - MNIST experiments:
   - Need to set the MNIST data folder!
+  - Run mnist_get_pretrained.ipynb to get a pretrained CNN on original MNIST
   - Single source exp: run submit_simu_MNIST_patches_2M.py
   - Mutiple source exp: run submit_simu_MNIST_patches.py
   - Read the results and plot with MNIST_read_and_plot_whitepatch2M.ipynb and MNIST_read_and_plot_rotation5M.ipynb
