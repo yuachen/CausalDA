@@ -783,7 +783,7 @@ class CIRM(BaseEstimator):
         ypreds = {}
         ypred = 0
 
-        x, y = data[source[self.sourcInd]]
+        x, y = data[source[self.sourceInd]]
         x1 = np.concatenate((x, np.ones((x.shape[0], 1))), axis=1)
         nm = x.shape[0]
         conditionx1 = np.mean(x1, axis=0) - np.mean(x1.dot(beta_invariant)) * b_invariant
@@ -882,7 +882,7 @@ class CIRMi(BaseEstimator):
         diffs = {}
         ypred = 0
 
-        x, y = data[source[self.sourcInd]]
+        x, y = data[source[self.sourceInd]]
         x1 = np.concatenate((x, np.ones((x.shape[0], 1))), axis=1)
         nm = x.shape[0]
         conditionx1 = np.mean(x1, axis=0) - np.mean(x1.dot(beta_invariant)) * b_invariant
